@@ -5,13 +5,22 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.example</groupId>
   <version>1.0-SNAPSHOT</version>
-  <artifactId>helloworld</artifactId>
+  <artifactId>heroku-download</artifactId>
   <dependencies>
     <dependency>
-      <groupId>com.heroku.agent</groupId>
-      <artifactId>heroku-javaagent</artifactId>
-      <version>1.5</version>
-      <scope>runtime</scope>
+      <groupId>com.heroku.api</groupId>
+      <artifactId>heroku-api</artifactId>
+      <version>0.18</version>
+    </dependency>
+    <dependency>
+      <groupId>com.heroku.api</groupId>
+      <artifactId>heroku-json-jackson</artifactId>
+      <version>0.18</version>
+    </dependency>
+    <dependency>
+      <groupId>com.heroku.api</groupId>
+      <artifactId>heroku-http-apache</artifactId>
+      <version>0.18</version>
     </dependency>
   </dependencies>
   <build>
