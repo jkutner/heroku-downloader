@@ -1,4 +1,5 @@
 import com.heroku.api.HerokuAPI;
+import com.heroku.api.Release;
 import com.heroku.api.Slug;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -8,25 +9,42 @@ import org.apache.http.impl.client.HttpClients;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.List;
 
 public class Main {
   public static void main(String[] args) throws Exception {
 
     String herokuApiKey = System.getenv("HEROKU_API_TOKEN");
-    String patchSlugId = System.getenv("PATCH_SLUG_ID");
+    String appName = System.getenv("APP_NAME");
 
-    if (patchSlugId == null) {
-      System.out.println("No PATCH_SLUG_ID found. Skipping.");
-      return;
+    if (appName == null) {
+      throw new IllegalArgumentException("No APP_NAME found!");
     }
 
     HerokuAPI api = new HerokuAPI(herokuApiKey);
 
-    Slug slug = api.getSlugInfo("murmuring-sands-88689", patchSlugId);
+    List<Release> releases = api.listReleases(appName);
+
+    Release latestRelease = null;
+    Integer i = releases.size();
+    while (latestRelease == null) {
+      i--;
+      if (i < 0) throw new RuntimeException("No Slug found for " + appName + "!");
+      Release r = releases.get(i);
+      if (r.getSlug() != null) {
+        latestRelease = r;
+      }
+    }
+
+    System.out.println("Release: " + latestRelease.getVersion());
+
+    Slug slug = api.getSlugInfo(appName, latestRelease.getSlug().getId());
 
     System.out.println("Downloading: " + slug.getBlob().getUrl());
 
-    CloseableHttpClient httpclient = HttpClients.createDefault();
+    CloseableHttpClient httpclient = HttpClients.custom()
+        .setSSLHostnameVerifier((s, sslSession) -> s.matches("^.*.s3.amazonaws.com$")).build();
+
     HttpGet get = new HttpGet(slug.getBlob().getUrl());
     CloseableHttpResponse response = httpclient.execute(get);
 

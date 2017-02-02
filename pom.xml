@@ -10,17 +10,17 @@
     <dependency>
       <groupId>com.heroku.api</groupId>
       <artifactId>heroku-api</artifactId>
-      <version>0.18</version>
+      <version>0.20</version>
     </dependency>
     <dependency>
       <groupId>com.heroku.api</groupId>
       <artifactId>heroku-json-jackson</artifactId>
-      <version>0.18</version>
+      <version>0.20</version>
     </dependency>
     <dependency>
       <groupId>com.heroku.api</groupId>
       <artifactId>heroku-http-apache</artifactId>
-      <version>0.18</version>
+      <version>0.20</version>
     </dependency>
   </dependencies>
   <build>
